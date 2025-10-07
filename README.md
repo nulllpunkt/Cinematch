@@ -14,4 +14,3 @@ Backend considerations: Use Flask or FastAPI for building API endpoints, handlin
 Frontend considerations: Currently using HTML, Tailwind CSS, and JavaScript.
 Database considerations: Considering PostgreSQL to build user profile + track their preferences.
 
-Test

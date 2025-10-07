@@ -13,3 +13,5 @@ Using these models will require me to configure HuggingFace API within my app.
 Backend considerations: Use Flask or FastAPI for building API endpoints, handling user requests, HuggingFace integration using Python.
 Frontend considerations: Currently using HTML, Tailwind CSS, and JavaScript.
 Database considerations: Considering PostgreSQL to build user profile + track their preferences.
+
+Test

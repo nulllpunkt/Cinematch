@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - CineMatch</title>
+    <!-- Load Tailwind CSS from CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load custom modern styles -->
+    <link rel="stylesheet" href="/static/styles/modern.css">
+</head>
+<body class="bg-transparent text-white font-sans pb-24 md:pb-0">
+
+    <nav class="glass fixed top-0 left-0 right-0 z-40 p-4 flex justify-between items-center">
+        <div class="text-3xl font-bold text-red-500 text-glow" style="font-family: 'Poppins', sans-serif;">
+            <a href="cinematch.html">Cinematch</a>
+        </div>
+        <div class="hidden md:flex items-center space-x-6 text-lg">
+            <a href="cinematch.html" class="text-gray-300 hover:text-red-400 transition-colors">Home</a>
+            <a href="explore.html" class="text-gray-300 hover:text-red-400 transition-colors">Explore</a>
+            <a href="watchlist.html" class="text-gray-300 hover:text-red-400 transition-colors">Watchlist</a>
+            <a href="cinebot.html" class="text-gray-300 hover:text-red-400 transition-colors">Cinebot</a>
+            <a href="profile.html" class="text-white font-bold hover:text-red-400 transition-colors">Profile</a>
+        </div>
+        <div class="hidden md:block" id="user-nav">
+            <!-- This will be replaced by JS -->
+            <a href="/login.html" class="text-gray-300 hover:text-red-400 transition-colors">Login</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mx-auto mt-24 p-4 relative z-10">
+        <div class="max-w-2xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-4" style="font-family: 'Poppins', sans-serif;">My Profile</h1>
+            <p class="text-xl text-gray-400 mb-8">Your movie preferences and stats.</p>
+        </div>
+
+        <div class="max-w-4xl mx-auto glass-strong rounded-2xl shadow-glow-strong p-8 border border-white/10" id="profile-container">
+            <!-- Profile content will be loaded here by JavaScript -->
+            <p class="text-center text-gray-400">Loading profile...</p>
+        </div>
+    </div>
+
+    <!-- Mobile-only Navigation Bar -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full glass border-t border-white/10 shadow-glow p-3 z-40">
+        <div class="flex justify-around items-center">
+            <a href="cinematch.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span>Home</span>
+            </a>
+            <a href="explore.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <span>Explore</span>
+            </a>
+            <a href="watchlist.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                <span>Watchlist</span>
+            </a>
+            <a href="cinebot.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mb-1">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V8.25a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 8.25v10.5A2.25 2.25 0 006.75 21z" />
+                </svg>
+                <span>Cinebot</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center text-xs font-medium text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>Profile</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+    // --- User Authentication UI ---
+    async function checkSession() {
+        try {
+            const response = await fetch('/api/session');
+            const data = await response.json();
+            const userNav = document.getElementById('user-nav');
+
+            if (data.is_logged_in) {
+                userNav.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <span class="text-white">Welcome, ${data.user.username}</span>
+                        <button onclick="logout()" class="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700">Logout</button>
+                    </div>
+                `;
+                // Now that we know the user is logged in, fetch their profile data
+                fetchProfileData();
+            } else {
+                userNav.innerHTML = '<a href="/login.html" class="text-gray-300 hover:text-white">Login</a>';
+                // Redirect to login if not authenticated
+                window.location.href = '/login.html?redirect=profile.html';
+            }
+        } catch (error) {
+            console.error('Error checking session:', error);
+            const userNav = document.getElementById('user-nav');
+            userNav.innerHTML = '<a href="/login.html" class="text-gray-300 hover:text-white">Login</a>';
+            window.location.href = '/login.html?redirect=profile.html';
+        }
+    }
+
+    async function logout() {
+        try {
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.href = '/login.html';
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    }
+
+    async function fetchProfileData() {
+        try {
+            const response = await fetch('/api/profile');
+            if (!response.ok) {
+                throw new Error('Failed to fetch profile data');
+            }
+            const profile = await response.json();
+            
+            const statsResponse = await fetch('/api/profile/stats');
+            if (!statsResponse.ok) {
+                throw new Error('Failed to fetch profile stats');
+            }
+            const stats = await statsResponse.json();
+            
+            renderProfile(profile, stats);
+        } catch (error) {
+            console.error('Error fetching profile data:', error);
+            document.getElementById('profile-container').innerHTML = '<p class="text-red-400 text-center">Could not load profile data.</p>';
+        }
+    }
+
+    function renderProfile(profile, stats) {
+        const container = document.getElementById('profile-container');
+        
+        const genreTags = stats.favorite_genres.length > 0
+            ? stats.favorite_genres.map(genre => `<span class="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium">${genre[0]} (${genre[1]})</span>`).join('')
+            : '<p class="text-gray-400">No favorite genres yet. Like some movies to see your stats!</p>';
+
+        container.innerHTML = `
+            <div class="flex flex-col items-center md:flex-row md:items-start md:space-x-8">
+                <div class="w-32 h-32 bg-gray-700 rounded-full mb-6 md:mb-0 flex-shrink-0 flex items-center justify-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="text-center md:text-left flex-grow">
+                    <h2 class="text-3xl font-bold">${profile.username}</h2>
+                    <p class="text-gray-400">${profile.email}</p>
+                    <p class="text-gray-500 text-sm mt-1">Member since ${profile.member_since}</p>
+                    <p class="text-gray-400 mt-4">Total Movies Liked: <span class="font-bold text-purple-400">${stats.total_movies}</span></p>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 mt-8 pt-8">
+                <h3 class="text-2xl font-semibold mb-4">Update Your Profile</h3>
+                <form id="profile-form" class="space-y-4 max-w-md">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-300">Username</label>
+                        <input type="text" id="username" name="username" value="${profile.username}" class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-red-500 focus:border-red-500">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-300">Email</label>
+                        <input type="email" id="email" name="email" value="${profile.email}" class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-red-500 focus:border-red-500">
+                    </div>
+                    <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Save Changes</button>
+                </form>
+                <p id="form-message" class="mt-4 text-sm"></p>
+            </div>
+
+            <div class="border-t border-gray-700 mt-8 pt-8">
+                <h3 class="text-2xl font-semibold mb-4">Your Favorite Genres</h3>
+                <div class="flex flex-wrap gap-3">
+                    ${genreTags}
+                </div>
+            </div>
+        `;
+
+        document.getElementById('profile-form').addEventListener('submit', handleProfileUpdate);
+    }
+
+    async function handleProfileUpdate(event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        const messageEl = document.getElementById('form-message');
+
+        try {
+            const response = await fetch('/api/profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                messageEl.textContent = 'Profile updated successfully!';
+                messageEl.className = 'text-green-400';
+                // Optionally, refresh just the username in the nav
+                checkSession(); 
+            } else {
+                messageEl.textContent = result.error || 'An error occurred.';
+                messageEl.className = 'text-red-400';
+            }
+        } catch (error) {
+            messageEl.textContent = 'An unexpected error occurred.';
+            messageEl.className = 'text-red-400';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', checkSession);
+    // --- End User Authentication UI ---
+    </script>
+</body>
+</html>

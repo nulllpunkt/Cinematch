@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watchlist - CineMatch</title>
+    <!-- Load Tailwind CSS from CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load custom modern styles -->
+    <link rel="stylesheet" href="/static/styles/modern.css">
+</head>
+<body class="bg-transparent text-white font-sans pb-24 md:pb-0">
+
+    <nav class="glass fixed top-0 left-0 right-0 z-40 p-4 flex justify-between items-center">
+        <div class="text-3xl font-bold text-red-500 text-glow" style="font-family: 'Poppins', sans-serif;">
+            <a href="cinematch.html">Cinematch</a>
+        </div>
+        <div class="hidden md:flex items-center space-x-6 text-lg">
+            <a href="cinematch.html" class="text-gray-300 hover:text-red-400 transition-colors">Home</a>
+            <a href="explore.html" class="text-gray-300 hover:text-red-400 transition-colors">Explore</a>
+            <a href="watchlist.html" class="text-white font-bold">Watchlist</a>
+            <a href="cinebot.html" class="text-gray-300 hover:text-red-400 transition-colors">Cinebot</a>
+            <a href="profile.html" class="text-gray-300 hover:text-red-400 transition-colors">Profile</a>
+        </div>
+        <div class="hidden md:block" id="user-nav">
+            <!-- This will be replaced by JS -->
+            <a href="/login.html" class="text-gray-300 hover:text-red-400 transition-colors">Login</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mx-auto mt-24 p-4 relative z-10">
+        <h1 class="text-5xl font-bold mb-10" style="font-family: 'Poppins', sans-serif;">My Watchlist</h1>
+
+        <!-- Watchlist Grid -->
+        <div id="watchlist-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            <!-- Watchlist items will render here -->
+        </div>
+    </div>
+
+    <!-- Movie Detail Modal (reused from other pages) -->
+    <div id="movie-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div id="modal-content" class="glass-strong modal-3d rounded-2xl shadow-glow-strong w-full max-w-4xl max-h-[90vh] overflow-y-auto relative border border-white/10">
+            <!-- Content injected by JS -->
+        </div>
+    </div>
+
+    <!-- Mobile-only Navigation Bar -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full glass border-t border-white/10 shadow-glow p-3 z-40">
+        <div class="flex justify-around items-center">
+            <a href="cinematch.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span>Home</span>
+            </a>
+            <a href="explore.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <span>Explore</span>
+            </a>
+            <a href="watchlist.html" class="flex flex-col items-center text-xs font-medium text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                <span>Watchlist</span>
+            </a>
+            <a href="cinebot.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mb-1">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V8.25a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 8.25v10.5A2.25 2.25 0 006.75 21z" />
+                </svg>
+                <span>Cinebot</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>Profile</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+    async function fetchWatchlistPage() {
+        try {
+            const res = await fetch('/api/watchlist');
+            if (!res.ok) throw new Error('watchlist fetch failed');
+            const body = await res.json();
+            const items = body.watchlist || [];
+            renderWatchlistPage(items);
+        } catch (err) {
+            console.error('fetchWatchlistPage error', err);
+            const container = document.getElementById('watchlist-container');
+            container.innerHTML = '<p class="text-red-400 col-span-full">Failed to load watchlist.</p>';
+        }
+    }
+
+    function renderWatchlistPage(items) {
+        const container = document.getElementById('watchlist-container');
+        container.innerHTML = '';
+        if (!items || items.length === 0) {
+            container.innerHTML = '<div class="glass rounded-2xl p-8 col-span-full text-center"><p class="text-gray-300 text-lg">Your watchlist is empty. Start liking movies to add them!</p></div>';
+            return;
+        }
+        items.forEach(m => {
+            const card = document.createElement('div');
+            card.className = 'glass rounded-2xl overflow-hidden shadow-glow card-hover group relative';
+            
+            const poster = m.Poster && m.Poster !== 'N/A' 
+                ? `<img src="${m.Poster}" alt="${m.Title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 cursor-pointer" onclick="showMovieDetails('${m.imdbID}')">` 
+                : `<div class="w-full h-full bg-gray-700/50 flex items-center justify-center"><p class="text-gray-400 text-sm">No Image</p></div>`;
+
+            const details = `
+                <div class="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                    <h3 class="font-bold text-md">${m.Title}</h3>
+                    <p class="text-xs text-gray-300">${m.Year} &middot; ${m.imdbRating} ★</p>
+                    <button class="absolute top-2 right-2 btn-gradient text-white rounded-full w-8 h-8 flex items-center justify-center hover:scale-110 pointer-events-auto transition-all" onclick="deleteMovie('${m.imdbID}', event)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>
+                </div>
+            `;
+
+            card.innerHTML = poster + details;
+            container.appendChild(card);
+        });
+    }
+
+    async function deleteMovie(imdbID, event) {
+        event.stopPropagation(); // Prevent card hover effects from interfering
+        try {
+            const r = await fetch(`/api/like/${imdbID}`, { method: 'DELETE' });
+            if (r.ok) {
+                // Optimistically remove the card from the UI
+                event.target.closest('.group').remove();
+                // Or refetch the whole list for consistency
+                // fetchWatchlistPage(); 
+            } else {
+                alert('Failed to delete movie.');
+            }
+        } catch (err) {
+            console.error('delete like error', err);
+            alert('An error occurred while deleting the movie.');
+        }
+    }
+
+    // Movie detail modal functions (copied from other pages)
+    const modal = document.getElementById('movie-modal');
+    const modalContent = document.getElementById('modal-content');
+
+    async function showMovieDetails(imdbID) {
+        if (!imdbID) return;
+        modal.classList.remove('hidden');
+        modalContent.classList.add('active');
+        modalContent.innerHTML = '<div class="p-8"><div class="bg-gray-700/30 h-96 rounded-xl animate-pulse"></div></div>';
+
+        try {
+            const res = await fetch(`/api/movies?i=${imdbID}`);
+            if (!res.ok) throw new Error('Failed to fetch details');
+            const movie = await res.json();
+
+            const content = `
+                <div class="p-8 md:p-10">
+                    <button onclick="closeModal()" class="absolute top-6 right-6 text-gray-400 hover:text-red-400 text-4xl leading-none transition-all hover:scale-110 hover:rotate-90 duration-300">&times;</button>
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/3 flex-shrink-0">
+                            <img src="${movie.Poster !== 'N/A' ? movie.Poster : ''}" alt="${movie.Title}" class="w-full rounded-2xl shadow-glow-strong border border-white/10 transition-transform duration-300 hover:scale-105">
+                        </div>
+                        <div class="md:w-2/3">
+                            <h2 class="text-5xl font-bold mb-3" style="font-family: 'Poppins', sans-serif;">${movie.Title}</h2>
+                            <div class="flex items-center space-x-4 text-gray-300 mb-6 text-lg">
+                                <span class="glass px-3 py-1 rounded-full">${movie.Year}</span>
+                                <span class="glass px-3 py-1 rounded-full">${movie.Rated || ''}</span>
+                                <span class="glass px-3 py-1 rounded-full">${movie.Runtime || ''}</span>
+                            </div>
+                            <p class="text-lg mb-8 leading-relaxed text-gray-200">${movie.Plot}</p>
+                            <div class="space-y-4 text-lg">
+                                <p class="glass px-4 py-3 rounded-xl"><strong class="text-red-400">Genre:</strong> <span class="text-gray-200">${movie.Genre}</span></p>
+                                <p class="glass px-4 py-3 rounded-xl"><strong class="text-red-400">Director:</strong> <span class="text-gray-200">${movie.Director}</span></p>
+                                <p class="glass px-4 py-3 rounded-xl"><strong class="text-red-400">Actors:</strong> <span class="text-gray-200">${movie.Actors}</span></p>
+                                <p class="glass px-4 py-3 rounded-xl"><strong class="text-red-400">IMDb Rating:</strong> <span class="font-bold text-yellow-400 text-2xl ml-2">${movie.imdbRating}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            modalContent.innerHTML = content;
+        } catch (err) {
+            modalContent.innerHTML = '<div class="p-8"><p class="text-red-400 text-xl">Could not load movie details. Please try again.</p><button onclick="closeModal()" class="absolute top-6 right-6 text-gray-400 hover:text-white text-4xl">&times;</button></div>';
+            console.error('showMovieDetails error', err);
+        }
+    }
+
+    function closeModal() {
+        modalContent.classList.remove('active');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modalContent.innerHTML = '';
+        }, 300);
+    }
+
+    // Close modal on outside click
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) closeModal();
+    });
+
+    document.addEventListener('DOMContentLoaded', fetchWatchlistPage);
+
+    // --- User Authentication UI ---
+    async function checkSession() {
+        try {
+            const response = await fetch('/api/session');
+            const data = await response.json();
+            const userNav = document.getElementById('user-nav');
+
+            if (data.is_logged_in) {
+                userNav.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <span class="text-white font-medium">Welcome, ${data.user.username}</span>
+                        <button onclick="logout()" class="px-4 py-2 btn-gradient text-white rounded-lg hover:scale-105 transition-all duration-300 shadow-glow">Logout</button>
+                    </div>
+                `;
+            } else {
+                userNav.innerHTML = '<a href="/login.html" class="glass px-4 py-2 rounded-lg text-gray-200 hover:text-red-400 transition-all hover:scale-105">Login</a>';
+                // Redirect to login if not authenticated, as this is a protected page
+                window.location.href = '/login.html?redirect=watchlist.html';
+            }
+        } catch (error) {
+            console.error('Error checking session:', error);
+            const userNav = document.getElementById('user-nav');
+            userNav.innerHTML = '<a href="/login.html" class="glass px-4 py-2 rounded-lg text-gray-200 hover:text-red-400 transition-all">Login</a>';
+            window.location.href = '/login.html?redirect=watchlist.html';
+        }
+    }
+
+    async function logout() {
+        try {
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.href = '/login.html';
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', checkSession);
+    // --- End User Authentication UI ---
+    </script>
+</body>
+</html>

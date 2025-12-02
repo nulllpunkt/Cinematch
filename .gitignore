@@ -1,0 +1,25 @@
+backend/.env
+
+# Trained model files (too large for GitHub - 2GB+)
+backend/trained_chatbot/
+*.bin
+*.safetensors
+*.h5
+*.pt
+*.pth
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+School AI saas project.code-workspace

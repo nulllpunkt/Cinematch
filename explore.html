@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore - CineMatch</title>
+    <!-- Load Tailwind CSS from CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load custom modern styles -->
+    <link rel="stylesheet" href="/static/styles/modern.css">
+</head>
+<body class="bg-transparent text-white font-sans pb-24 md:pb-0">
+
+    <nav class="glass fixed top-0 left-0 right-0 z-40 p-4 flex justify-between items-center">
+        <div class="text-3xl font-bold text-red-500 text-glow" style="font-family: 'Poppins', sans-serif;">
+            <a href="cinematch.html">Cinematch</a>
+        </div>
+        <div class="hidden md:flex items-center space-x-6 text-lg">
+            <a href="cinematch.html" class="text-gray-300 hover:text-red-400 transition-colors">Home</a>
+            <a href="explore.html" class="text-white font-bold hover:text-red-400 transition-colors">Explore</a>
+            <a href="watchlist.html" class="text-gray-300 hover:text-red-400 transition-colors">Watchlist</a>
+            <a href="cinebot.html" class="text-gray-300 hover:text-red-400 transition-colors">Cinebot</a>
+            <a href="profile.html" class="text-gray-300 hover:text-red-400 transition-colors">Profile</a>
+        </div>
+        <div class="hidden md:block" id="user-nav">
+            <a href="/login.html" class="text-gray-300 hover:text-red-400 transition-colors">Login</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mx-auto mt-24 p-4 relative z-10">
+        <h1 class="text-5xl font-bold mb-10" style="font-family: 'Poppins', sans-serif;">Explore Movies</h1>
+
+        <!-- Search Bar -->
+        <div class="mb-8 max-w-2xl mx-auto">
+            <div class="relative">
+                <input type="text" id="search-input" placeholder="Search for movies, actors, directors..." class="w-full bg-gray-800 border-2 border-gray-700 rounded-full py-3 px-6 text-lg text-white focus:outline-none focus:border-red-500 transition-colors">
+                <button id="search-button" class="absolute right-4 top-1/2 -translate-y-1/2 bg-red-600 text-white rounded-full p-2 hover:bg-red-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Grid -->
+        <div id="results-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            <!-- Search results will render here -->
+        </div>
+    </div>
+
+    <!-- Movie Detail Modal -->
+    <div id="movie-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div id="modal-content" class="glass-strong modal-3d rounded-2xl shadow-glow-strong w-full max-w-4xl max-h-[90vh] overflow-y-auto relative border border-white/10">
+            <!-- Content will be injected here -->
+        </div>
+    </div>
+
+    <!-- Mobile-only Navigation Bar -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full glass border-t border-white/10 shadow-glow p-3 z-40">
+        <div class="flex justify-around items-center">
+            <a href="cinematch.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span>Home</span>
+            </a>
+            <a href="explore.html" class="flex flex-col items-center text-xs font-medium text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <span>Explore</span>
+            </a>
+            <a href="watchlist.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                <span>Watchlist</span>
+            </a>
+            <a href="cinebot.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mb-1">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V8.25a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 8.25v10.5A2.25 2.25 0 006.75 21z" />
+                </svg>
+                <span>Cinebot</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>Profile</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+    const resultsContainer = document.getElementById('results-container');
+    const modal = document.getElementById('movie-modal');
+    const modalContent = document.getElementById('modal-content');
+
+    async function searchMovies(query) {
+        if (!query) return;
+        resultsContainer.innerHTML = '<p class="text-gray-400 col-span-full">Searching...</p>';
+        try {
+            const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+            if (!res.ok) throw new Error('Search failed');
+            const data = await res.json();
+            renderResults(data.results || []);
+        } catch (err) {
+            console.error('searchMovies error', err);
+            resultsContainer.innerHTML = '<p class="text-red-400 col-span-full">Failed to load search results.</p>';
+        }
+    }
+
+    function renderResults(movies) {
+        resultsContainer.innerHTML = '';
+        if (!movies.length) {
+            resultsContainer.innerHTML = '<p class="text-gray-400 col-span-full">No movies found. Try a different search.</p>';
+            return;
+        }
+        movies.forEach(m => {
+            const card = document.createElement('div');
+            card.className = 'bg-gray-800 rounded-xl overflow-hidden shadow-lg group relative cursor-pointer';
+            card.setAttribute('onclick', `showMovieDetails('${m.imdbID}')`);
+            
+            const poster = m.Poster && m.Poster !== 'N/A' 
+                ? `<img src="${m.Poster}" alt="${m.Title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">` 
+                : `<div class="w-full h-full bg-gray-700 flex items-center justify-center"><p class="text-gray-400 text-sm">No Image</p></div>`;
+
+            const details = `
+                <div class="absolute inset-0 bg-black bg-opacity-70 flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <h3 class="font-bold text-md">${m.Title}</h3>
+                    <p class="text-xs text-gray-300">${m.Year}</p>
+                </div>
+            `;
+
+            card.innerHTML = poster + details;
+            resultsContainer.appendChild(card);
+        });
+    }
+
+    async function showMovieDetails(imdbID) {
+        modal.classList.remove('hidden');
+        modalContent.innerHTML = '<p class="text-white p-8">Loading details...</p>';
+
+        try {
+            const res = await fetch(`/api/movies?i=${imdbID}`);
+            if (!res.ok) throw new Error('Failed to fetch details');
+            const movie = await res.json();
+
+            const content = `
+                <div class="p-6 md:p-8">
+                    <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">&times;</button>
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/3 flex-shrink-0">
+                            <img src="${movie.Poster !== 'N/A' ? movie.Poster : ''}" alt="${movie.Title}" class="w-full rounded-lg shadow-lg">
+                        </div>
+                        <div class="md:w-2/3">
+                            <h2 class="text-4xl font-bold mb-2">${movie.Title}</h2>
+                            <div class="flex items-center space-x-4 text-gray-400 mb-4">
+                                <span>${movie.Year}</span>
+                                <span>${movie.Rated}</span>
+                                <span>${movie.Runtime}</span>
+                            </div>
+                            <p class="text-lg mb-6">${movie.Plot}</p>
+                            <div class="space-y-3">
+                                <p><strong>Genre:</strong> ${movie.Genre}</p>
+                                <p><strong>Director:</strong> ${movie.Director}</p>
+                                <p><strong>Actors:</strong> ${movie.Actors}</p>
+                                <p><strong>IMDb Rating:</strong> <span class="font-bold text-yellow-400">${movie.imdbRating}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            modalContent.innerHTML = content;
+        } catch (err) {
+            modalContent.innerHTML = '<p class="text-red-400 p-8">Could not load movie details. Please try again.</p><button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">&times;</button>';
+            console.error('showMovieDetails error', err);
+        }
+    }
+
+    function closeModal() {
+        modal.classList.add('hidden');
+        modalContent.innerHTML = '';
+    }
+
+    // Close modal on outside click
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    searchButton.addEventListener('click', () => searchMovies(searchInput.value));
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchMovies(searchInput.value);
+        }
+    });
+
+    // --- User Authentication UI ---
+    async function checkSession() {
+        try {
+            const response = await fetch('/api/session');
+            const data = await response.json();
+            const userNav = document.getElementById('user-nav');
+
+            if (data.is_logged_in) {
+                userNav.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <span class="text-white">Welcome, ${data.user.username}</span>
+                        <button onclick="logout()" class="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700">Logout</button>
+                    </div>
+                `;
+            } else {
+                userNav.innerHTML = '<a href="/login.html" class="text-gray-300 hover:text-white">Login</a>';
+            }
+        } catch (error) {
+            console.error('Error checking session:', error);
+            const userNav = document.getElementById('user-nav');
+            userNav.innerHTML = '<a href="/login.html" class="text-gray-300 hover:text-white">Login</a>';
+        }
+    }
+
+    async function logout() {
+        try {
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.reload();
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', checkSession);
+    // --- End User Authentication UI ---
+    </script>
+</body>
+</html>

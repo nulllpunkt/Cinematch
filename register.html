@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Cinematch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load custom modern styles -->
+    <link rel="stylesheet" href="/static/styles/modern.css">
+</head>
+<body class="bg-transparent text-white">
+
+    <div class="min-h-screen flex flex-col items-center justify-center">
+        <div class="w-full max-w-md p-8 space-y-6 glass-strong rounded-2xl shadow-glow-strong">
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-red-500 text-glow" style="font-family: 'Poppins', sans-serif;">Cinematch</h1>
+                <p class="mt-2 text-gray-400">Create your account to get started.</p>
+            </div>
+
+            <form id="register-form" class="space-y-6">
+                <div>
+                    <label for="username" class="text-sm font-medium text-gray-300">Username</label>
+                    <input type="text" id="username" name="username" required
+                           class="w-full px-4 py-2 mt-2 text-white bg-gray-700/50 border border-gray-600/50 rounded-md focus:ring-red-500 focus:border-red-500 focus:outline-none transition-colors">
+                </div>
+
+                <div>
+                    <label for="email" class="text-sm font-medium text-gray-300">Email</label>
+                    <input type="email" id="email" name="email" required
+                           class="w-full px-4 py-2 mt-2 text-white bg-gray-700/50 border border-gray-600/50 rounded-md focus:ring-red-500 focus:border-red-500 focus:outline-none transition-colors">
+                </div>
+
+                <div>
+                    <label for="password" class="text-sm font-medium text-gray-300">Password</label>
+                    <input type="password" id="password" name="password" required
+                           class="w-full px-4 py-2 mt-2 text-white bg-gray-700/50 border border-gray-600/50 rounded-md focus:ring-red-500 focus:border-red-500 focus:outline-none transition-colors">
+                </div>
+
+                <div id="error-message" class="text-red-400 text-sm hidden"></div>
+
+                <div>
+                    <button type="submit"
+                            class="w-full px-4 py-2 font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-800 transition-colors">
+                        Create Account
+                    </button>
+                </div>
+            </form>
+
+            <div class="text-center text-sm text-gray-400">
+                <p>Already have an account? <a href="/login.html" class="font-medium text-red-500 hover:text-red-400 transition-colors">Log in</a></p>
+                 <p class="mt-2"><a href="/cinematch.html" class="font-medium text-red-500 hover:text-red-400 transition-colors">Back to Home</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, email, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Redirect to the main page on successful registration
+                    window.location.href = '/cinematch.html';
+                } else {
+                    errorMessage.textContent = data.error || 'An unknown error occurred.';
+                    errorMessage.classList.remove('hidden');
+                }
+            } catch (error) {
+                errorMessage.textContent = 'Failed to connect to the server.';
+                errorMessage.classList.remove('hidden');
+            }
+        });
+    </script>
+
+</body>
+</html>

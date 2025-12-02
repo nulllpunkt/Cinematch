@@ -1,0 +1,6 @@
+Flask==2.0.1
+python-dotenv
+requests
+flask-cors
+# Pin Werkzeug to avoid import errors with older Flask versions
+Werkzeug==2.3.7

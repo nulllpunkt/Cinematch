@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMatch</title>
+    <!-- Load Tailwind CSS from CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load custom modern styles -->
+    <link rel="stylesheet" href="/static/styles/modern.css">
+</head>
+<body class="bg-transparent text-white font-sans">
+
+    <nav class="glass fixed top-0 left-0 right-0 z-40 p-4 flex justify-between items-center">
+        <div class="text-3xl font-bold text-red-500 text-glow" style="font-family: 'Poppins', sans-serif;">
+            <a href="cinematch.html">Cinematch</a>
+        </div>
+        <div class="hidden md:flex items-center space-x-6 text-lg" id="nav-links">
+            <a href="cinematch.html" class="text-white font-bold hover:text-red-400 transition-colors">Home</a>
+            <a href="explore.html" class="text-gray-300 hover:text-red-400 transition-colors">Explore</a>
+            <a href="watchlist.html" class="text-gray-300 hover:text-red-400 transition-colors">Watchlist</a>
+            <a href="cinebot.html" class="text-gray-300 hover:text-red-400 transition-colors">Cinebot</a>
+            <a href="profile.html" class="text-gray-300 hover:text-red-400 transition-colors">Profile</a>
+        </div>
+        <div class="hidden md:block" id="user-nav">
+            <!-- This will be replaced by JS -->
+            <a href="/login.html" class="text-gray-300 hover:text-red-400 transition-colors">Login</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="w-full max-w-6xl mx-auto p-4 md:p-8 mt-20 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            <!-- Main Content -->
+            <main class="md:col-span-2">
+                <!-- Main Recommendation Area -->
+                <section class="flex flex-col items-center justify-center p-8 glass-strong rounded-3xl mb-8 shadow-glow-strong parallax-layer fade-in-up">
+                    <div class="w-full max-w-sm h-[28rem] bg-gray-700/30 rounded-2xl flex items-center justify-center text-gray-400 font-bold mb-6 overflow-hidden border border-gray-600/30 shadow-glow card-hover" id="movie-poster">
+                        <div class="skeleton w-full h-full rounded-2xl"></div>
+                    </div>
+                    <h2 class="text-3xl font-bold text-center mb-3 tracking-wide" id="movie-title" style="font-family: 'Poppins', sans-serif;">Movie Title</h2>
+                    <p class="text-gray-300 text-center mb-8 text-lg" id="movie-details">
+                        Genre | Year | Rating
+                    </p>
+                    <div class="flex space-x-8">
+                        <!-- Dislike Button -->
+                        <button onclick="dislikeMovie()" class="w-20 h-20 flex items-center justify-center glass text-red-500 rounded-full shadow-glow hover:scale-110 hover:shadow-glow-strong transition-all duration-300 hover:bg-red-500/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                        </button>
+                        <!-- Like Button -->
+                        <button onclick="likeMovie()" class="w-20 h-20 flex items-center justify-center btn-gradient text-white rounded-full shadow-glow-strong hover:scale-110 transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                        </button>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Side Panel for Recent Matches -->
+            <aside class="parallax-layer">
+                <h3 class="text-2xl font-semibold mb-6" style="font-family: 'Poppins', sans-serif;">Recent Matches</h3>
+                <div id="recent-matches-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-1 gap-4">
+                    <!-- Watchlist items will be injected here -->
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Movie Detail Modal -->
+    <div id="movie-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div id="modal-content" class="glass-strong modal-3d rounded-2xl shadow-glow-strong w-full max-w-4xl max-h-[90vh] overflow-y-auto relative border border-white/10">
+            <!-- Content will be injected here -->
+        </div>
+    </div>
+
+    <!-- Mobile-only Navigation Bar -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full glass border-t border-white/10 shadow-glow p-3 z-40">
+        <div class="flex justify-around items-center">
+            <a href="cinematch.html" class="flex flex-col items-center text-xs font-medium text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span>Home</span>
+            </a>
+            <a href="explore.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <span>Explore</span>
+            </a>
+            <a href="watchlist.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                <span>Watchlist</span>
+            </a>
+            <a href="cinebot.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mb-1">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V8.25a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 8.25v10.5A2.25 2.25 0 006.75 21z" />
+                </svg>
+                <span>Cinebot</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>Profile</span>
+            </a>
+        </div>
+    </nav>
+<script>
+let movieQueue = [];
+let currentMovie = null;
+const QUEUE_MIN = 3;   // when to fetch more
+const QUEUE_BATCH = 8; // how many to fetch per call
+const modal = document.getElementById('movie-modal');
+const modalContent = document.getElementById('modal-content');
+
+// Parallax scrolling effect
+let ticking = false;
+function updateParallax() {
+    const scrolled = window.pageYOffset;
+    const parallaxLayers = document.querySelectorAll('.parallax-layer');
+    
+    parallaxLayers.forEach((layer, index) => {
+        const speed = (index + 1) * 0.05;
+        layer.style.transform = `translateY(${scrolled * speed}px)`;
+    });
+    
+    // Update background parallax
+    document.body.style.setProperty('--scroll', scrolled * 0.5 + 'px');
+    
+    ticking = false;
+}
+
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        window.requestAnimationFrame(updateParallax);
+        ticking = true;
+    }
+});
+
+
+async function fetchRecommendations() {
+  try {
+    const res = await fetch(`/api/random`);
+    if (!res.ok) throw new Error('Random fetch failed: ' + res.status);
+    const body = await res.json();
+    const items = body.results || [];
+    const filtered = items.filter(i => i.Poster && i.Poster !== 'N/A');
+    movieQueue.push(...filtered);
+  } catch (err) {
+    console.error('fetchRecommendations error', err);
+  }
+}
+
+async function ensureQueue() {
+  if (movieQueue.length < QUEUE_MIN) {
+    await fetchRecommendations();
+  }
+}
+
+async function loadNextMovie() {
+  await ensureQueue();
+  if (movieQueue.length === 0) {
+    document.getElementById('movie-poster').innerHTML = '<div class="skeleton w-full h-full"></div>';
+    document.getElementById('movie-title').innerText = 'No movies available';
+    document.getElementById('movie-details').innerText = '';
+    currentMovie = null;
+    return;
+  }
+  const brief = movieQueue.shift();
+  
+  const imdbId = brief.imdbID;
+  if (!imdbId) {
+      console.error("Movie in queue is missing imdbID, skipping:", brief);
+      loadNextMovie();
+      return;
+  }
+
+  try {
+    const resp = await fetch(`/api/movies?i=${imdbId}`);
+    const data = resp.ok ? await resp.json() : null;
+
+    if (data && data.Response === "True") {
+      const posterDiv = document.getElementById('movie-poster');
+      posterDiv.innerHTML = `<img src="${data.Poster}" alt="${data.Title}" class="w-full h-full object-cover transition-all duration-500 hover:scale-105">`;
+      posterDiv.classList.add('cursor-pointer');
+      posterDiv.setAttribute('onclick', `showMovieDetails('${data.imdbID}')`);
+
+      document.getElementById('movie-title').innerText = data.Title;
+      document.getElementById('movie-details').innerText = `${data.Genre || 'N/A'} | ${data.Year || 'N/A'} | ${data.imdbRating || 'N/A'}`;
+      currentMovie = data;
+    } else {
+      console.warn(`Failed to get full details for ${brief.Title}, skipping.`);
+      loadNextMovie();
+    }
+  } catch (err) {
+    console.error('loadNextMovie error', err);
+    loadNextMovie();
+  } finally {
+    if (movieQueue.length < QUEUE_MIN) fetchRecommendations();
+  }
+}
+
+function likeMovie() {
+  if (!currentMovie || !currentMovie.imdbID) {
+    loadNextMovie();
+    return;
+  }
+
+  const payload = currentMovie;
+
+  (async () => {
+    try {
+      const r = await fetch('/api/like', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      if (r.status === 401) { // Unauthorized
+          window.location.href = '/login.html';
+          return;
+      }
+      if (!r.ok) {
+          const errorBody = await r.json();
+          throw new Error(`Like failed with status ${r.status}: ${errorBody.error}`);
+      }
+      await fetchWatchlist();
+    } catch (err) {
+      console.error('like error', err);
+    }
+  })();
+
+  loadNextMovie();
+}
+
+function dislikeMovie() {
+  if (!currentMovie || !currentMovie.imdbID) {
+    loadNextMovie();
+    return;
+  }
+
+  const payload = { imdbID: currentMovie.imdbID };
+
+  (async () => {
+    try {
+      const r = await fetch('/api/dislike', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      if (r.status === 401) { // Unauthorized
+          window.location.href = '/login.html';
+          return;
+      }
+      if (!r.ok) {
+          const errorBody = await r.json();
+          throw new Error(`Dislike failed with status ${r.status}: ${errorBody.error}`);
+      }
+    } catch (err) {
+      console.error('dislike error', err);
+    }
+  })();
+
+  loadNextMovie();
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await fetchRecommendations();
+  loadNextMovie();
+  fetchWatchlist();
+});
+
+async function fetchWatchlist() {
+  if (!window.isLoggedIn) {
+    renderWatchlist([]);
+    return;
+  }
+  try {
+    const res = await fetch('/api/watchlist');
+    if (!res.ok) throw new Error('watchlist fetch failed');
+    const body = await res.json();
+    const items = body.watchlist || [];
+    renderWatchlist(items);
+  } catch (err) {
+    console.error('fetchWatchlist error', err);
+  }
+}
+
+function renderWatchlist(items) {
+  const grid = document.getElementById('recent-matches-grid');
+  grid.innerHTML = '';
+  if (!window.isLoggedIn) {
+    grid.innerHTML = '<div class="glass rounded-xl p-4 text-center col-span-2 md:col-span-1"><p class="text-sm text-gray-300">Log in to add to your watchlist!</p></div>';
+    return;
+  }
+  if (!items.length) {
+    grid.innerHTML = '<div class="glass rounded-xl p-4 text-center col-span-2 md:col-span-1"><p class="text-sm text-gray-300">No recent matches yet.</p></div>';
+    return;
+  }
+  // Show only the top 4-6 recent matches
+  items.slice(0, 6).forEach(m => {
+    const poster = m.Poster && m.Poster !== 'N/A' ? `<img src="${m.Poster}" alt="${m.Title}" class="w-full h-40 object-cover rounded-lg mb-2 transition-transform duration-300 hover:scale-105">` : `<div class="w-full h-40 skeleton rounded-lg mb-2"></div>`;
+    const card = document.createElement('div');
+    card.className = 'glass rounded-2xl p-3 cursor-pointer card-hover';
+    card.setAttribute('onclick', `showMovieDetails('${m.imdbID}')`);
+    card.innerHTML = `
+        ${poster}
+        <h4 class="font-semibold text-sm truncate">${m.Title}</h4>
+        <p class="text-xs text-gray-400">${m.Year}</p>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+async function showMovieDetails(imdbID) {
+    if (!imdbID) return;
+    modal.classList.remove('hidden');
+    modalContent.classList.add('active');
+    modalContent.innerHTML = '<div class="p-8"><div class="skeleton h-96 rounded-xl"></div></div>';
+
+    try {
+        const res = await fetch(`/api/movies?i=${imdbID}`);
+        if (!res.ok) throw new Error('Failed to fetch details');
+        const movie = await res.json();
+
+        const content = `
+            <div class="p-8 md:p-10">
+                <button onclick="closeModal()" class="absolute top-6 right-6 text-gray-400 hover:text-red-400 text-4xl leading-none transition-all hover:scale-110 hover:rotate-90 duration-300">&times;</button>
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/3 flex-shrink-0">
+                        <img src="${movie.Poster !== 'N/A' ? movie.Poster : ''}" alt="${movie.Title}" class="w-full rounded-2xl shadow-glow-strong border border-white/10 transition-transform duration-300 hover:scale-105">
+                    </div>
+                    <div class="md:w-2/3">
+                        <h2 class="text-5xl font-bold mb-3" style="font-family: 'Poppins', sans-serif;">${movie.Title}</h2>
+                        <div class="flex items-center space-x-4 text-gray-300 mb-6 text-lg">
+                            <span class="glass px-3 py-1 rounded-full">${movie.Year}</span>
+                            <span class="glass px-3 py-1 rounded-full">${movie.Rated}</span>
+                            <span class="glass px-3 py-1 rounded-full">${movie.Runtime}</span>
+                        </div>
+                        <p class="text-lg mb-8 leading-relaxed text-gray-200">${movie.Plot}</p>
+                        <div class="space-y-4 text-lg">
+                            <p class="glass px-4 py-3 rounded-xl"><strong class="text-red-400">Genre:</strong> <span class="text-gray-200">${movie.Genre}</span></p>
+                            <p class="glass px-4 py-3 rounded-xl"><strong class="text-red-400">Director:</strong> <span class="text-gray-200">${movie.Director}</span></p>
+                            <p class="glass px-4 py-3 rounded-xl"><strong class="text-red-400">Actors:</strong> <span class="text-gray-200">${movie.Actors}</span></p>
+                            <p class="glass px-4 py-3 rounded-xl"><strong class="text-red-400">IMDb Rating:</strong> <span class="font-bold text-yellow-400 text-2xl ml-2">${movie.imdbRating}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        modalContent.innerHTML = content;
+    } catch (err) {
+        modalContent.innerHTML = '<div class="p-8"><p class="text-red-400 text-xl">Could not load movie details. Please try again.</p><button onclick="closeModal()" class="absolute top-6 right-6 text-gray-400 hover:text-white text-4xl">&times;</button></div>';
+        console.error('showMovieDetails error', err);
+    }
+}
+
+function closeModal() {
+    modalContent.classList.remove('active');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        modalContent.innerHTML = '';
+    }, 300);
+}
+
+// Close modal on outside click
+modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+        closeModal();
+    }
+});
+
+// --- User Authentication UI ---
+async function checkSession() {
+    try {
+        const response = await fetch('/api/session');
+        const data = await response.json();
+        const userNav = document.getElementById('user-nav');
+
+        if (data.is_logged_in) {
+            window.isLoggedIn = true;
+            userNav.innerHTML = `
+                <div class="flex items-center space-x-4">
+                    <span class="text-white font-medium">Welcome, ${data.user.username}</span>
+                    <button onclick="logout()" class="px-4 py-2 btn-gradient text-white rounded-lg hover:scale-105 transition-all duration-300 shadow-glow">Logout</button>
+                </div>
+            `;
+        } else {
+            window.isLoggedIn = false;
+            userNav.innerHTML = '<a href="/login.html" class="glass px-4 py-2 rounded-lg text-gray-200 hover:text-red-400 transition-all hover:scale-105">Login</a>';
+        }
+    } catch (error) {
+        console.error('Error checking session:', error);
+        window.isLoggedIn = false;
+        const userNav = document.getElementById('user-nav');
+        userNav.innerHTML = '<a href="/login.html" class="glass px-4 py-2 rounded-lg text-gray-200 hover:text-red-400 transition-all">Login</a>';
+    }
+}
+
+async function logout() {
+    try {
+        await fetch('/api/logout', { method: 'POST' });
+        window.location.reload();
+    } catch (error) {
+        console.error('Logout failed:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', checkSession);
+// --- End User Authentication UI ---
+
+</script>
+</body>
+</html>

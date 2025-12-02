@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinebot - CineMatch</title>
+    <!-- Load Tailwind CSS from CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load custom modern styles -->
+    <link rel="stylesheet" href="/static/styles/modern.css">
+</head>
+<body class="bg-transparent text-white font-sans pb-24 md:pb-0">
+
+    <nav class="glass fixed top-0 left-0 right-0 z-40 p-4 flex justify-between items-center">
+        <div class="text-3xl font-bold text-red-500 text-glow" style="font-family: 'Poppins', sans-serif;">
+            <a href="cinematch.html">Cinematch</a>
+        </div>
+        <div class="hidden md:flex items-center space-x-6 text-lg">
+            <a href="cinematch.html" class="text-gray-300 hover:text-red-400 transition-colors">Home</a>
+            <a href="explore.html" class="text-gray-300 hover:text-red-400 transition-colors">Explore</a>
+            <a href="watchlist.html" class="text-gray-300 hover:text-red-400 transition-colors">Watchlist</a>
+            <a href="cinebot.html" class="text-white font-bold hover:text-red-400 transition-colors">Cinebot</a>
+            <a href="profile.html" class="text-gray-300 hover:text-red-400 transition-colors">Profile</a>
+        </div>
+        <div class="hidden md:block" id="user-nav">
+            <!-- This will be replaced by JS -->
+            <a href="/login.html" class="text-gray-300 hover:text-red-400 transition-colors">Login</a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-24 p-4 flex flex-col items-center relative z-10">
+        <h1 class="text-5xl font-bold mb-4" style="font-family: 'Poppins', sans-serif;">Cinebot</h1>
+        <p class="text-xl text-gray-400 mb-8">Your AI movie recommendation assistant. Ask me for movie suggestions!</p>
+
+        <!-- Chat Container -->
+        <div id="chat-container" class="w-full max-w-3xl glass-strong rounded-2xl shadow-glow-strong flex flex-col border border-white/10" style="height: 60vh;">
+            <!-- Messages Area -->
+            <div id="chat-messages" class="flex-1 p-6 overflow-y-auto">
+                <!-- Example Bot Message -->
+                <div class="flex items-start gap-3 mb-4">
+                    <div class="bg-red-600 p-2 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V8.25a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 8.25v10.5A2.25 2.25 0 006.75 21z" />
+                        </svg>
+                    </div>
+                    <div class="bg-gray-700/50 p-3 rounded-lg border border-gray-600/50">
+                        <p>Hello! What kind of movies are you in the mood for today? For example, you could say "I want to watch a funny movie" or "suggest some action movies".</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-4 bg-gradient-to-r from-gray-700/30 to-gray-700/20 border-t border-gray-600/50 rounded-b-2xl">
+                <form id="chat-form" class="flex items-center gap-4">
+                    <input type="text" id="user-input" class="flex-1 bg-gray-700/50 border border-gray-600/50 rounded-full py-3 px-5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors" placeholder="Type your message...">
+                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                        Send
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Movie Detail Modal -->
+    <div id="movie-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div id="modal-content" class="glass-strong modal-3d rounded-2xl shadow-glow-strong w-full max-w-4xl max-h-[90vh] overflow-y-auto relative border border-white/10">
+            <!-- Content will be injected here -->
+        </div>
+    </div>
+
+    <!-- Mobile-only Navigation Bar -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full glass border-t border-white/10 shadow-glow p-3 z-40">
+        <div class="flex justify-around items-center">
+            <a href="cinematch.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span>Home</span>
+            </a>
+            <a href="explore.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <span>Explore</span>
+            </a>
+            <a href="watchlist.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                <span>Watchlist</span>
+            </a>
+            <a href="cinebot.html" class="flex flex-col items-center text-xs font-medium text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mb-1">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V8.25a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 8.25v10.5A2.25 2.25 0 006.75 21z" />
+                </svg>
+                <span>Cinebot</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center text-xs font-medium text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>Profile</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
+        const chatMessages = document.getElementById('chat-messages');
+        const modal = document.getElementById('movie-modal');
+        const modalContent = document.getElementById('modal-content');
+
+        chatForm.addEventListener('submit', handleUserInput);
+
+        function appendMessage(sender, content) {
+            const messageWrapper = document.createElement('div');
+            
+            if (sender === 'user') {
+                messageWrapper.className = 'flex justify-end mb-4';
+                messageWrapper.innerHTML = `
+                    <div class="bg-blue-600 p-3 rounded-lg max-w-md">
+                        <p>${content}</p>
+                    </div>
+                `;
+            } else { // bot
+                messageWrapper.className = 'flex items-start gap-3 mb-4';
+                messageWrapper.innerHTML = `
+                    <div class="bg-red-600 p-2 rounded-full mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V8.25a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 8.25v10.5A2.25 2.25 0 006.75 21z" />
+                        </svg>
+                    </div>
+                    <div class="bg-gray-700 p-3 rounded-lg max-w-xl" id="bot-message-content">
+                        ${content}
+                    </div>
+                `;
+            }
+            chatMessages.appendChild(messageWrapper);
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+        }
+
+        async function handleUserInput(event) {
+            event.preventDefault();
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            appendMessage('user', message);
+            userInput.value = '';
+
+            // Show typing indicator
+            appendMessage('bot', '<p class="text-gray-400">Cinebot is thinking...</p>');
+            const typingIndicator = chatMessages.lastChild;
+
+            try {
+                const response = await fetch('/api/cinebot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: message })
+                });
+
+                typingIndicator.remove(); // Remove typing indicator
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    appendMessage('bot', `<p class="text-red-400">Sorry, I had trouble finding recommendations. Error: ${error.detail || error.error}</p>`);
+                    return;
+                }
+
+                const data = await response.json();
+                
+                let botResponseHtml = `<p class="mb-4">Based on your request, I think you'll like movies in the <strong>${data.predicted_genre}</strong> genre. Here are a few suggestions:</p>`;
+                
+                if (data.recommendations && data.recommendations.length > 0) {
+                    const recommendationsGrid = document.createElement('div');
+                    recommendationsGrid.className = 'grid grid-cols-2 md:grid-cols-4 gap-4';
+                    
+                    data.recommendations.forEach(movie => {
+                        const poster = movie.Poster !== 'N/A' ? movie.Poster : 'https://via.placeholder.com/150x222.png?text=No+Image';
+                        recommendationsGrid.innerHTML += `
+                            <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg cursor-pointer" onclick="showMovieDetails('${movie.imdbID}')">
+                                <img src="${poster}" alt="${movie.Title} Poster" class="w-full h-48 object-cover">
+                                <div class="p-2">
+                                    <h3 class="font-bold text-sm">${movie.Title}</h3>
+                                    <p class="text-xs text-gray-400">${movie.Year}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    botResponseHtml += recommendationsGrid.outerHTML;
+                } else {
+                    botResponseHtml += `<p>I couldn't find any specific movies for that genre, but I hope you find a great ${data.predicted_genre} film!</p>`;
+                }
+                
+                appendMessage('bot', botResponseHtml);
+
+            } catch (error) {
+                typingIndicator.remove();
+                appendMessage('bot', '<p class="text-red-400">Sorry, something went wrong. Please try again.</p>');
+                console.error('Recommendation error:', error);
+            }
+        }
+
+        async function showMovieDetails(imdbID) {
+            if (!imdbID) return;
+            modal.classList.remove('hidden');
+            modalContent.innerHTML = '<p class="text-white p-8">Loading details...</p>';
+
+            try {
+                const res = await fetch(`/api/movies?i=${imdbID}`);
+                if (!res.ok) throw new Error('Failed to fetch details');
+                const movie = await res.json();
+
+                const content = `
+                    <div class="p-6 md:p-8">
+                        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl leading-none">&times;</button>
+                        <div class="flex flex-col md:flex-row gap-8">
+                            <div class="md:w-1/3 flex-shrink-0">
+                                <img src="${movie.Poster !== 'N/A' ? movie.Poster : ''}" alt="${movie.Title}" class="w-full rounded-lg shadow-lg">
+                            </div>
+                            <div class="md:w-2/3">
+                                <h2 class="text-4xl font-bold mb-2">${movie.Title}</h2>
+                                <div class="flex items-center space-x-4 text-gray-400 mb-4">
+                                    <span>${movie.Year}</span>
+                                    <span>${movie.Rated}</span>
+                                    <span>${movie.Runtime}</span>
+                                </div>
+                                <p class="text-lg mb-6">${movie.Plot}</p>
+                                <div class="space-y-3">
+                                    <p><strong>Genre:</strong> ${movie.Genre}</p>
+                                    <p><strong>Director:</strong> ${movie.Director}</p>
+                                    <p><strong>Actors:</strong> ${movie.Actors}</p>
+                                    <p><strong>IMDb Rating:</strong> <span class="font-bold text-yellow-400">${movie.imdbRating}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                modalContent.innerHTML = content;
+            } catch (err) {
+                modalContent.innerHTML = '<p class="text-red-400 p-8">Could not load movie details. Please try again.</p><button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">&times;</button>';
+                console.error('showMovieDetails error', err);
+            }
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            modalContent.innerHTML = '';
+        }
+
+        // Close modal on outside click
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // --- User Authentication UI ---
+        async function checkSession() {
+            try {
+                const response = await fetch('/api/session');
+                const data = await response.json();
+                const userNav = document.getElementById('user-nav');
+
+                if (data.is_logged_in) {
+                    userNav.innerHTML = `
+                        <div class="flex items-center space-x-4">
+                            <span class="text-white">Welcome, ${data.user.username}</span>
+                            <button onclick="logout()" class="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700">Logout</button>
+                        </div>
+                    `;
+                } else {
+                    userNav.innerHTML = '<a href="/login.html" class="text-gray-300 hover:text-white">Login</a>';
+                }
+            } catch (error) {
+                console.error('Error checking session:', error);
+                const userNav = document.getElementById('user-nav');
+                userNav.innerHTML = '<a href="/login.html" class="text-gray-300 hover:text-white">Login</a>';
+            }
+        }
+
+        async function logout() {
+            try {
+                await fetch('/api/logout', { method: 'POST' });
+                window.location.reload();
+            } catch (error) {
+                console.error('Logout failed:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', checkSession);
+        // --- End User Authentication UI ---
+    </script>
+
+</body>
+</html>

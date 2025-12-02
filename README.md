@@ -21,7 +21,7 @@ Cinematch is an AI-augmented movie recommendation service that allows users to '
 - [AI/ML Models](#aiml-models)
 - [Database Schema](#database-schema)
 - [Frontend Pages](#frontend-pages)
-- [Future Enhancements](#future-enhancements)
+
 
 ---
 

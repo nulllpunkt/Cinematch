@@ -58,8 +58,7 @@ Cinematch is an AI-augmented movie recommendation service that allows users to '
 - **OMDb API** - Open Movie Database for movie information (posters, plots, ratings, etc.)
 
 ### AI/ML
-- **AventIQ-AI/bert-movie-recommendation-system** - BERT model for genre classification
-- **microsoft/DialoGPT-medium** - Fine-tuned chatbot model (Cinebot)
+- **AventIQ-AI/bert-movie-recommendation-system** - BERT model for genre classification and movie recommendations
 
 ---
 
@@ -80,10 +79,8 @@ Cinematch/
 │   ├── __init__.py             # Flask app factory & extensions
 │   ├── models.py               # SQLAlchemy database models
 │   ├── routes.py               # API endpoints & route handlers
-│   ├── train_chatbot.py        # Script to fine-tune DialoGPT
 │   ├── prepare_dataset.py      # Dataset preparation utilities
-│   ├── requirements.txt        # Python dependencies
-│   └── trained_chatbot/        # Fine-tuned model weights
+│   └── requirements.txt        # Python dependencies
 ├── static/
 │   └── styles/
 │       └── modern.css          # Custom CSS styles
@@ -155,12 +152,6 @@ OMDB_API_KEY=your-omdb-api-key
    
    Open your browser and navigate to: `http://localhost:5001`
 
-3. **Train the Cinebot model (optional)**
-   ```bash
-   python backend/train_chatbot.py
-   ```
-   This fine-tunes DialoGPT on `movie_dataset.txt` and saves the model to `backend/trained_chatbot/`.
-
 ---
 
 ## API Endpoints
@@ -210,21 +201,13 @@ OMDB_API_KEY=your-omdb-api-key
 
 ## AI/ML Models
 
-### Genre Classification (BERT)
+### Cinebot (BERT Genre Classification)
 
-The app uses **AventIQ-AI/bert-movie-recommendation-system** from Hugging Face to classify user text into movie genres:
+The chatbot uses **AventIQ-AI/bert-movie-recommendation-system** from Hugging Face to classify user text into movie genres and provide recommendations:
 
 - **Input**: Natural language text (e.g., "I want something scary and thrilling")
-- **Output**: Predicted genre (Horror, Thriller, etc.)
+- **Output**: Predicted genre and movie recommendations from OMDb
 - **Supported Genres**: Action, Adventure, Animation, Comedy, Crime, Documentary, Drama, Family, Fantasy, History, Horror, Music, Mystery, Romance, Science Fiction, TV Movie, Thriller, War, Western
-
-### Cinebot (DialoGPT)
-
-The chatbot is based on **microsoft/DialoGPT-medium**, fine-tuned on movie-related conversations:
-
-- Training script: `backend/train_chatbot.py`
-- Training data: `movie_dataset.txt`
-- Output directory: `backend/trained_chatbot/`
 
 ---
 

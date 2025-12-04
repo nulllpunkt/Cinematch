@@ -8,6 +8,9 @@ Cinematch is an AI-augmented movie recommendation service that allows users to '
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?logo=tailwind-css)
 
 ---
+## Tutorial Videos and Repo Overview for Dr. Elahe
+![Repo Overview Video](https://www.youtube.com/watch?v=yZnijazkq4k)
+![Public Presentation Video](https://www.youtube.com/watch?v=yZnijazkq4k)
 
 ## Table of Contents
 

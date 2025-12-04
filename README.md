@@ -10,7 +10,7 @@ Cinematch is an AI-augmented movie recommendation service that allows users to '
 ---
 ## Tutorial Videos and Repo Overview for Dr. Elahe
 ![Repo Overview Video](https://www.youtube.com/watch?v=yZnijazkq4k)
-![Public Presentation Video](https://www.youtube.com/watch?v=yZnijazkq4k)
+![Public Presentation Video](https://www.youtube.com/watch?v=C5apS1JpbRU)
 
 ## Table of Contents
 
